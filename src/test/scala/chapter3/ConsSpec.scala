@@ -100,4 +100,43 @@ class ConsSpec extends PropSpec with Matchers with PropertyChecks {
     val k = Cons(2, List(3,6,7))
     List.init(k) shouldBe Cons(2, List(3,6))
   }
+
+  property("what happens when I pass Nil Cons into foldRight") {
+    println(List.foldRight(List(1,2,3),  Nil:List[Int])(Cons(_,_)))
+  }
+
+  property("length test") {
+    List.length(List(1,2,3)) shouldBe 3
+    List.length(List()) shouldBe 0
+    List.length(List(1,2,3,4,5)) shouldBe 5
+  }
+
+  property("length2 test") {
+    List.length2(List(1,2,3)) shouldBe 3
+    List.length2(List()) shouldBe 0
+    List.length2(List(1,2,3,4,5)) shouldBe 5
+  }
+
+  property("sum with foldleft") {
+    forAll(sumInts) { i =>
+      List.sum3(i._1) == i._2
+    }
+  }
+
+  property("sum4") {
+    forAll(sumInts) { i =>
+      List.sum3(i._1) == i._2
+    }
+  }
+
+  property("product but with foldleft") {
+    forAll(productDoubles) { d =>
+      List.product3(d._1) == d._2
+    }
+
+  }
+
+  property("reverse") {
+    List.reverse(List(1,2,3)) shouldBe List(3,2,1)
+  }
 }
