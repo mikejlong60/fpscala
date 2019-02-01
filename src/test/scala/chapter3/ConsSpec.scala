@@ -73,10 +73,10 @@ class ConsSpec extends PropSpec with Matchers with PropertyChecks {
 
   property("dropwhile should drop some even ints") {
     // drop until test fails
-    val i = Cons(2, List(4,6,8, 1))
-    List.dropWhile(i)((a: Int) => a % 2 == 0) shouldBe Cons(1, List())
-    val k = Cons(2, List(3,6,7))
-    List.dropWhile(k)((a: Int) => a % 2 == 0) shouldBe Cons(3, List(6,7))
+      val i = Cons(2, List(4,6,8, 1))
+      val k = Cons(2, List(3,6,7))
+      List.dropWhile(i)((a: Int) => a % 2 == 0) shouldBe Cons(1, List())
+      List.dropWhile(k)((a: Int) => a % 2 == 0) shouldBe Cons(3, List(6,7))
   }
 
   property("drop should drop by count") {
@@ -94,11 +94,6 @@ class ConsSpec extends PropSpec with Matchers with PropertyChecks {
     val i = Cons(1, List(2,3))
     val j = Cons(4, List())
     List.append(i, j) shouldBe Cons(1, List(2,3,4))
-  }
-
-  property("initing") {
-    val k = Cons(2, List(3,6,7))
-    List.init(k) shouldBe Cons(2, List(3,6))
   }
 
   property("what happens when I pass Nil Cons into foldRight") {

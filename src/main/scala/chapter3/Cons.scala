@@ -5,21 +5,8 @@ case object Nil extends List[Nothing]
 case class Cons[+A](head: A, tail: List[A]) extends List[A]
 
 object List {
-
-  def init[A](l: List[A]): List[A] = {
-    def keepCons(l: List[A], ll: List[A]): List[A] = l match {
-      case Cons(_, Nil) => ll
-      case Cons(h, t) => keepCons(t, append(Cons(h, List()), ll))
-      case _ => l
-    }
-
-    keepCons(l, apply())
-  }
  
-  def append[A](a1: List[A], a2: List[A]): List[A] =  a1 match {
-    case Nil => a2
-    case Cons(h,t) => Cons(h, append(t, a2))
-  }
+  def append[A](a1: List[A], a2: List[A]): List[A] = foldRight2(a1, a2)(Cons(_, _))
 
   def tail[A](as: List[A]): List[A] = as match {
     case Nil => as
@@ -83,6 +70,25 @@ object List {
     case Cons(0.0, _) => 0.0
     case Cons(x, xs) => product(xs)
   }
+
+  def concat[A](l: List[List[A]]): List[A] = foldRight(l, Nil: List[A])((a, b) => append(a, b)) //Can be foldRightTailRec
+
+  def map[A, B](as: List[A])(f: A => B): List[B] = foldRight(as, Nil: List[B])((x, z) => Cons(f(x), z))
+
+  def filter[A](as: List[A])(f: A => Boolean): List[A] = foldRight(as, Nil: List[A])((x, z) => if (f(x)) Cons(x, z) else z)
+
+  def filterUsingFlatMap[A](as: List[A])(f: A => Boolean): List[A] = flatMap(as)(x => if (f(x)) List(x) else List() )
+
+  def flatMap[A, B](as: List[A])(f: A => List[B]): List[B] = concat(map(as)(f))
+
+  def zipFold[A, B, C](l1: List[A], l2: List[B], accum: List[C])(f: (A, B) => C): List[C] = {
+     (l1, l2) match {
+       case (Cons(x, xs), Cons(y, ys)) => zipFold(xs, ys, Cons(f(x, y), accum))(f)
+       case _ => reverse(accum)
+     }
+  }
+
+  def zipWith[A, B, C](l1: List[A], l2: List[B])(f: (A, B) => C): List[C] = zipFold(l1, l2, Nil: List[C])(f)
 
   def apply[A](as: A*): List[A] =
     if (as.isEmpty) Nil
