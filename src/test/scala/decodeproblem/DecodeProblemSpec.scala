@@ -11,13 +11,11 @@ class DecodeProblemSpec extends PropSpec with Matchers with PropertyChecks {
 
   //Your sliding thing gave me the clue I needed. Trying to use fold was too hard.
   property("test decode problem") {
-    forAll(oneTo26) { xs =>
+   forAll(oneTo26) { xs =>
       val combined = xs.sliding(2, 1).toList.filter(xy => xy.mkString("").toInt <= 26)
-      val answer = combined.size + xs.size
-      println("combined:"+combined.toList)
-      println("answer:"+answer)
-      println("xs:"+xs)
+      val answer = combined.size + 1
       answer should be >= (xs.size)
+
     }
   }
 }
